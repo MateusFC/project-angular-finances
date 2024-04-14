@@ -2,20 +2,20 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
-import { Category } from "./category.model";
+import { Entry } from "./entry.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class CategoryService {
+export class EntriesService {
   constructor(private http: HttpClient) {}
 
-  private apiPath: string = "api/categories";
+  private apiPath: string = "api/entries";
 
-  private jsonDataToCategories(jsonData: any[]): Category[] {
-    const categories: Category[] = [];
-    jsonData.map((element) => categories.push(element));
-    return categories;
+  private jsonDataToEntries(jsonData: any[]): Entry[] {
+    const entries: Entry[] = [];
+    jsonData.map((element) => entries.push(element));
+    return entries;
   }
 
   private handleError(error: any[]): Observable<any[]> {
@@ -23,36 +23,36 @@ export class CategoryService {
     return throwError(error);
   }
 
-  getAllCategory(): Observable<Category[]> {
+  getAllEntries(): Observable<Entry[]> {
     return this.http
       .get(this.apiPath)
-      .pipe(catchError(this.handleError), map(this.jsonDataToCategories));
+      .pipe(catchError(this.handleError), map(this.jsonDataToEntries));
   }
 
-  getByIdCategory(id: number): Observable<Category> {
+  getByIdEntries(id: number): Observable<Entry> {
     const url = `${this.apiPath}/${id}`;
     return this.http.get(url).pipe(
       catchError(this.handleError),
-      map((data) => data as Category)
+      map((data) => data as Entry)
     );
   }
 
-  createCategory(category: Category): Observable<Category> {
-    return this.http.post(this.apiPath, category).pipe(
+  createEntries(entries: Entry): Observable<Entry> {
+    return this.http.post(this.apiPath, entries).pipe(
       catchError(this.handleError),
-      map((data) => data as Category)
+      map((data) => data as Entry)
     );
   }
 
-  updateCategory(id: number, category: Category): Observable<Category> {
+  updateEntries(id: number, entries: Entry): Observable<Entry> {
     const url = `${this.apiPath}/${id}`;
-    return this.http.put(url, category).pipe(
+    return this.http.put(url, entries).pipe(
       catchError(this.handleError),
-      map(() => category)
+      map(() => entries)
     );
   }
 
-  deleteCategory(id: number): Observable<any> {
+  deleteEntries(id: number): Observable<any> {
     const url = `${this.apiPath}/${id}`;
     return this.http.delete(url).pipe(
       catchError(this.handleError),
