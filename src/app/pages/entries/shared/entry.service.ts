@@ -14,7 +14,10 @@ export class EntriesService {
 
   private jsonDataToEntries(jsonData: any[]): Entry[] {
     const entries: Entry[] = [];
-    jsonData.map((element) => entries.push(element));
+    jsonData.map((element) => {
+      const entry = Object.assign(new Entry(), element);
+      entries.push(entry);
+    });
     return entries;
   }
 
@@ -33,14 +36,14 @@ export class EntriesService {
     const url = `${this.apiPath}/${id}`;
     return this.http.get(url).pipe(
       catchError(this.handleError),
-      map((data) => data as Entry)
+      map((data) => Object.assign(new Entry(), data))
     );
   }
 
   createEntries(entries: Entry): Observable<Entry> {
     return this.http.post(this.apiPath, entries).pipe(
       catchError(this.handleError),
-      map((data) => data as Entry)
+      map((data) => Object.assign(new Entry(), data))
     );
   }
 
